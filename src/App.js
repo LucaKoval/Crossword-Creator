@@ -10,7 +10,26 @@ class App extends Component {
     	super(props);
 
     	this.state = {
+    		size: 4,
+    		data: [],
     	};
+  	}
+
+  	componentDidMount() {
+  		this.generateData();
+  	}
+
+  	generateData = () => {
+  		let size = this.state.size;
+  		let data = [];
+  		for (let i = 0; i < size; i++) {
+  			let row = [];
+  			for (let j = 0; j < size; j++) {
+  				row.push(Math.floor(Math.random() * 4 * size));
+  			}
+  			data.push(row);
+  		}
+  		this.setState({ data: data });
   	}
 
   	render() {
@@ -19,7 +38,8 @@ class App extends Component {
   				<div className={styles.contentContainer}>
 	  				<div className={styles.crosswordContainer}>
 	  					<Crossword
-	  						size={4}
+	  						size={this.state.size}
+	  						data={this.state.data}
 	  					/>
 	  				</div>
 	  				<div className={styles.buttonContainer}>
@@ -27,7 +47,7 @@ class App extends Component {
 	              			type="Submit"
 	              			className={styles.button}
 	              			value="Generate"
-	              			// onClick={this.onSubmit}
+	              			onClick={this.generateData}
 	            		/>
 	            		<div className={styles.buttonShadow} />
 	          		</div>

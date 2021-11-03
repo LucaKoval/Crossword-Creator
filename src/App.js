@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import './styles/global.css';
 import styles from './styles/App.module.css';
+import Crossword from './components/Crossword';
 
 
 class App extends Component {
@@ -17,6 +18,9 @@ class App extends Component {
   			<div className={styles.container}>
   				<div className={styles.contentContainer}>
 	  				<div className={styles.crosswordContainer}>
+	  					<Crossword
+	  						size={4}
+	  					/>
 	  				</div>
 	  				<div className={styles.buttonContainer}>
 	            		<input

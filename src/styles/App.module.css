@@ -1,4 +1,9 @@
 .container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+
 	width: 100vw;
 	height: 100vh;
 	background-color: white;
@@ -9,17 +14,19 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+
+	width: 80%;
 }
 
 .buttonContainer {
-	width: calc(100% + 4px);
+	width: calc(160px + 4px);
 	height: 52px;
 
 	position: relative;
 }
 
 .button {
-	width: 100%;
+	width: 160px;
 	height: 100%;
 
 	position: absolute;
@@ -44,7 +51,7 @@
 }
 
 .buttonShadow {
-	width: 100%;
+	width: 160px;
 	height: 100%;
 
 	background-color: var(--dark-green);

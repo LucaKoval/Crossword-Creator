@@ -1,0 +1,13 @@
+{
+  "board" : {
+    "width" : 1,
+    "height" : 1
+  },
+  "alphabet" : [
+    "1",
+    "0"
+  ],
+  "dictionary": [
+    "0"
+  ]
+}

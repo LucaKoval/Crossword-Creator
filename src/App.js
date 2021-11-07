@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import './styles/global.css';
 import styles from './styles/App.module.css';
-import Crossword from './components/Crossword';
+import {Crossword, ProblemInput} from './components/Crossword';
 
 
 class App extends Component {
@@ -50,8 +50,9 @@ class App extends Component {
 	              			onClick={this.generateData}
 	            		/>
 	            		<div className={styles.buttonShadow} />
-	          		</div>
-	          	</div>
+									<ProblemInput/>
+	          </div>
+	        </div>
   			</div>
   		);
   	}

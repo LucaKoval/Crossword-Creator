@@ -2,8 +2,8 @@ import React, { Component } from "react";
 
 import './styles/global.css';
 import styles from './styles/App.module.css';
-import {Crossword, ProblemInput} from './components/Crossword';
-
+import Crossword from './components/Crossword';
+import ProblemInput from './components/ProblemInput';
 
 class App extends Component {
   	constructor(props) {

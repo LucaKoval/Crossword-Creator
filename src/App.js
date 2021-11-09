@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import './styles/global.css';
 import styles from './styles/App.module.css';
+import ClueTable from './components/ClueTable';
 import Crossword from './components/Crossword';
 import ProblemInput from './components/ProblemInput';
 
@@ -11,6 +12,7 @@ class App extends Component {
 
     	this.state = {
     		size: 4,
+    		clues: [],
     		data: [],
     	};
   	}
@@ -21,6 +23,13 @@ class App extends Component {
 
   	generateData = () => {
   		let size = this.state.size;
+  		let clues = [];
+  		for (let i = 0; i < size * 2; i++) {
+  			let clue = "Test clue";
+  			clues.push(clue);
+  		}
+  		this.setState({ clues: clues });
+
   		let data = [];
   		for (let i = 0; i < size; i++) {
   			let row = [];
@@ -36,6 +45,11 @@ class App extends Component {
   		return(
   			<div className={styles.container}>
   				<div className={styles.contentContainer}>
+  					<div className={styles.clueTableContainer}>
+  						<ClueTable
+  							data={this.state.clues}
+  						/>
+  					</div>
 	  				<div className={styles.crosswordContainer}>
 	  					<Crossword
 	  						size={this.state.size}
@@ -50,9 +64,9 @@ class App extends Component {
 	              			onClick={this.generateData}
 	            		/>
 	            		<div className={styles.buttonShadow} />
-									<ProblemInput/>
-	          </div>
-	        </div>
+						<ProblemInput/>
+	          		</div>
+	        	</div>
   			</div>
   		);
   	}

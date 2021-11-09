@@ -18,6 +18,12 @@
 	width: 80%;
 }
 
+.clueTableContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
 .buttonContainer {
 	width: calc(160px + 4px);
 	height: 52px;

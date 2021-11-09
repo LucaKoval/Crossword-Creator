@@ -56,16 +56,16 @@ class App extends Component {
 	  						data={this.state.data}
 	  					/>
 	  				</div>
-	  				<div className={styles.buttonContainer}>
+	  				<div className="buttonContainer">
 	            		<input
 	              			type="Submit"
-	              			className={styles.button}
+	              			className="button"
 	              			value="Generate"
 	              			onClick={this.generateData}
 	            		/>
-	            		<div className={styles.buttonShadow} />
-						<ProblemInput/>
+	            		<div className="buttonShadow" />
 	          		</div>
+	          		<ProblemInput />
 	        	</div>
   			</div>
   		);

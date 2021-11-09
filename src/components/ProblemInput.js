@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import '../styles/global.css';
+import '../styles/ProblemInput.module.css';
 
 class ProblemInput extends Component {
   constructor(props) {
@@ -17,9 +18,15 @@ class ProblemInput extends Component {
 
   render() {
     return(
-      <div>
-        <input type = "file" onChange={this.onFileChange}/>
+      <div className="buttonContainer">
+        <input
+            type="file"
+            className="button"
+            onChange={this.onFileChange}
+        />
+        <div className="buttonShadow" />
       </div>
+
     );
   }
 }

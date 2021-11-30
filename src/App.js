@@ -18,6 +18,7 @@ class App extends Component {
     		size: 4,
     		clues: [],
     		data: [],
+    		sortedWords: [],
     	};
   	}
 
@@ -32,8 +33,61 @@ class App extends Component {
   		// }
 
   		const sortedWords = SortedWords["text"];
+  		this.setState({ sortedWords: sortedWords });
 
   		// Create the initial empty board
+  		// let board = [];
+  		// for (let i = 0; i < this.state.size; i++) {
+  		// 	let row = [];
+  		// 	for (let j = 0; j < this.state.size; j++) {
+  		// 		row.push("");
+  		// 	}
+  		// 	board.push(row);
+  		// }
+  		// this.setState({ data: board });
+
+  		this.generateData();
+  	}
+
+  	generateData = () => {
+  		// let size = this.state.size;
+  		// let clues = [];
+  		// for (let i = 0; i < size * 2; i++) {
+  		// 	let clue = "Test clue";
+  		// 	clues.push(clue);
+  		// }
+  		// this.setState({ clues: clues });
+
+  		// let data = [];
+  		// for (let i = 0; i < size; i++) {
+  		// 	let row = [];
+  		// 	for (let j = 0; j < size; j++) {
+  		// 		row.push(Math.floor(Math.random() * size * size));
+  		// 	}
+  		// 	data.push(row);
+  		// }
+  		// this.setState({ data: data });
+
+  		let sortedWords;
+  		if (this.state.sortedWords.length === 0) {
+			sortedWords = SortedWords["text"];
+  		} else {
+  			sortedWords = this.state.sortedWords;
+  		}
+
+  		// let board = [];
+  		// if (this.state.data.length === 0) {
+  		// 	for (let i = 0; i < this.state.size; i++) {
+	  	// 		let row = [];
+	  	// 		for (let j = 0; j < this.state.size; j++) {
+	  	// 			row.push("");
+	  	// 		}
+	  	// 		board.push(row);
+	  	// 	}
+  		// } else {
+  		// 	board = this.state.data;
+  		// }
+
   		let board = [];
   		for (let i = 0; i < this.state.size; i++) {
   			let row = [];
@@ -42,6 +96,8 @@ class App extends Component {
   			}
   			board.push(row);
   		}
+  		// REMOVE LINE BELOW?
+  		this.setState({ data: board });
 
   		// Do DFS, fill the board
   		let wordCounter = 0;
@@ -49,77 +105,87 @@ class App extends Component {
   		let col = 0;
   		let rowOrCol = 0;
   		let foundWord = false;
-  		while (wordCounter < sortedWords.length && (row < this.state.size || col < this.state.size)) {
-  			const word = sortedWords[wordCounter];
-  			if (word.length === this.state.size) { // Fits in board (in simplified nxn case)
-  				// Check that the word works with the rest of the board
-  				let fits = true;
-  				for (let i = 0; i < word.length; i++) {
-  					let boardLetter;
-  					if (rowOrCol % 2 === 0) { // Trying a row
-  						boardLetter = board[row][i];
-  					} else { // Trying a col
-  						boardLetter = board[i][col];
-  					}
-  					console.log(rowOrCol, word, boardLetter, word[i])
-  					if (boardLetter != "" && boardLetter != word[i]) fits = false;
-  				}
-
-  				if (fits) {
-  					for (let i = 0; i < word.length; i++) {
-	  					if (rowOrCol % 2 === 0) { // Trying a row
-	  						board[row][i] = word[i];
-	  					} else { // Trying a col
-	  						board[i][col] = word[i];
-	  					}
+  		let counter = 0;
+  		while (counter < 2 && (row < this.state.size || col < this.state.size)) {
+  			// Go back and replace the most-recently placed word
+  			if (rowOrCol > 0) {
+	  			rowOrCol--; // Get back
+	  			for (let i = 0; i < this.state.size; i++) {
+	  				if (rowOrCol % 2 === 0) { // Clear row
+	  					row--;
+	  					console.log(row)
+	  					board[row][i] = "";
+	  				} else { // Clear col
+	  					col--;
+	  					console.log(col)
+	  					board[i][row] = "";
 	  				}
-	  				foundWord = true;
-  				}
-  				console.log(board)
-  			}
-
-  			if (foundWord) {
-	  			if (rowOrCol % 2 === 0) { // Filled in a row
-	  				if (col < this.state.size) { // We haven't filled all columns, so switch rowOrCol
-	  					rowOrCol++;
-	  				}
-	  				row++;
-	  			} else { // Filled in a col
-	  				if (row < this.state.size) { // We haven't filled all rows, so switch rowOrCol
-	  					rowOrCol++;
-	  				}
-	  				col++;
 	  			}
-	  			foundWord = false;
 	  		}
 
-  			wordCounter++;
-  		}
+	  		while (wordCounter < sortedWords.length && (row < this.state.size || col < this.state.size)) {
+	  			// Randomization
+	  			if (Math.random() < 0.35) {
+	  				// Random int example from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+	  				wordCounter = Math.floor(Math.random() * sortedWords.length)
+	  			}
+	  			const word = sortedWords[wordCounter];
 
-  		this.generateData();
-  	}
+	  			if (word.length === this.state.size) { // Fits in board (in simplified nxn case)
+	  				// Check that the word works with the rest of the board
+	  				let fits = true;
+	  				for (let i = 0; i < word.length; i++) {
+	  					let boardLetter;
+	  					if (rowOrCol % 2 === 0) { // Trying a row
+	  						boardLetter = board[row][i];
+	  					} else { // Trying a col
+	  						boardLetter = board[i][col];
+	  					}
+	  					// console.log(rowOrCol, word, boardLetter, word[i])
+	  					if (boardLetter != "" && boardLetter != word[i]) fits = false;
+	  				}
 
-  	generateData = () => {
-  		let size = this.state.size;
-  		let clues = [];
-  		for (let i = 0; i < size * 2; i++) {
-  			let clue = "Test clue";
-  			clues.push(clue);
-  		}
-  		this.setState({ clues: clues });
+	  				if (fits) { // If the word was placed/is able to be placed
+	  					for (let i = 0; i < word.length; i++) {
+		  					if (rowOrCol % 2 === 0) { // Trying a row
+		  						board[row][i] = word[i];
+		  					} else { // Trying a col
+		  						board[i][col] = word[i];
+		  					}
+		  				}
+		  				foundWord = true;
+	  				}
+	  				console.log(board)
+	  			}
 
-  		let data = [];
-  		for (let i = 0; i < size; i++) {
-  			let row = [];
-  			for (let j = 0; j < size; j++) {
-  				row.push(Math.floor(Math.random() * size * size));
-  			}
-  			data.push(row);
-  		}
-  		this.setState({ data: data });
+	  			if (foundWord) {
+		  			if (rowOrCol % 2 === 0) { // Filled in a row
+		  				if (col < this.state.size) { // We haven't filled all columns, so switch rowOrCol
+		  					rowOrCol++;
+		  				}
+		  				row++;
+		  			} else { // Filled in a col
+		  				if (row < this.state.size) { // We haven't filled all rows, so switch rowOrCol
+		  					rowOrCol++;
+		  				}
+		  				col++;
+		  			}
+		  			foundWord = false;
+		  		}
+
+		  		console.log(rowOrCol, row, col)
+	  			wordCounter++;
+	  		}
+	  		counter++;
+	  	}
+
+  		this.setState({ data: board });
   	}
 
   	render() {
+  		// const sortedWords = this.state.sortedWords;
+  		// const board = this.state.data;
+
   		return(
   			<div className={styles.container}>
   				<div className={styles.contentContainer}>

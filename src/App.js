@@ -121,20 +121,6 @@ class App extends Component {
 	  					TimesUsed[word]--;
 	  				});
 	  			}
-
-
-	  			// const mostRecentOp = writeOps.pop();
-	  			// mostRecentOp.forEach(location => {
-	  			// 	board[location[0]][location[1]] = "";
-	  			// });
-
-	  			// TimesUsed[mostRecentOp[0][2]]--;
-
-	  			// if (rowOrCol % 2 === 0) { // Clear row
-	  			// 	row--;
-	  			// } else { // Clear col
-	  			// 	col--;
-	  			// }
 	  		}
 
 	  		while (wordCounter < sortedWords.length && (row < this.state.size || col < this.state.size)) {

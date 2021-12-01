@@ -10,6 +10,9 @@ import SortedWords from './data/sortedWords';
 // Dictionary is from https://github.com/matthewreagan/WebstersEnglishDictionary
 import Dictionary from './data/dictionary_compact';
 
+// Frequencies is from http://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
+import Frequencies from './data/frequencies';
+
 class App extends Component {
   	constructor(props) {
     	super(props);
@@ -19,6 +22,7 @@ class App extends Component {
     		clues: [],
     		data: [],
     		sortedWords: [],
+    		frequenciesDenom: 40000,
     	};
   	}
 
@@ -83,36 +87,49 @@ class App extends Component {
 	  			const word = sortedWords[wordCounter];
 
 	  			if (word.length === this.state.size) { // Fits in board (in simplified nxn case)
-	  				// Check that the word works with the rest of the board
-	  				let fits = true;
-	  				let writeOpRow = [];
-	  				for (let i = 0; i < word.length; i++) {
-	  					let boardLetter;
-	  					if (rowOrCol % 2 === 0) { // Trying a row
-	  						boardLetter = board[row][i];
-	  						if (boardLetter == "") {
-	  							writeOpRow.push([row, i])
-	  						}
-	  					} else { // Trying a col
-	  						boardLetter = board[i][col];
-	  						if (boardLetter == "") {
-	  							writeOpRow.push([i, col])
-	  						}
-	  					}
+	  				// Go through probabilistic rejection
+	  				let frequenciesProduct = 1;
+	  				let frequenciesDenom = this.state.frequenciesDenom;
+	  				word.split("").forEach(letter => {
+	  					frequenciesProduct *= Frequencies[letter]/frequenciesDenom;
+	  				});
 
-	  					if (boardLetter != "" && boardLetter != word[i]) fits = false;
-	  				}
-
-	  				if (fits) { // If the word was placed/is able to be placed
-	  					writeOps.push(writeOpRow);
-	  					for (let i = 0; i < word.length; i++) {
+	  				// The higher the frequency, the lower the chance of rejecting and the higher the chance of accepting
+	  				if (Math.random() < frequenciesProduct*100) { // Accept
+	  					// Check that the word works with the rest of the board
+		  				let fits = true;
+		  				let writeOpRow = [];
+		  				for (let i = 0; i < word.length; i++) {
+		  					let boardLetter;
 		  					if (rowOrCol % 2 === 0) { // Trying a row
-		  						board[row][i] = word[i];
+		  						boardLetter = board[row][i];
+		  						if (boardLetter == "") {
+		  							writeOpRow.push([row, i])
+		  						}
 		  					} else { // Trying a col
-		  						board[i][col] = word[i];
+		  						boardLetter = board[i][col];
+		  						if (boardLetter == "") {
+		  							writeOpRow.push([i, col])
+		  						}
 		  					}
+
+		  					if (boardLetter != "" && boardLetter != word[i]) fits = false;
 		  				}
-		  				foundWord = true;
+
+		  				if (fits) { // If the word was placed/is able to be placed
+		  					// console.log(word, frequenciesProduct)
+		  					writeOps.push(writeOpRow);
+		  					for (let i = 0; i < word.length; i++) {
+			  					if (rowOrCol % 2 === 0) { // Trying a row
+			  						board[row][i] = word[i];
+			  					} else { // Trying a col
+			  						board[i][col] = word[i];
+			  					}
+			  				}
+			  				foundWord = true;
+		  				}
+	  				} else {
+	  					// console.log("rejected", word, frequenciesProduct)
 	  				}
 	  			}
 

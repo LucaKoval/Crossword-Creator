@@ -107,14 +107,23 @@ class App extends Component {
   		let foundWord = false;
   		let counter = 0;
   		let writeOps = [];
-  		while (counter < 3 && (row < this.state.size || col < this.state.size)) {
+  		while (counter < 1000 && (row < this.state.size || col < this.state.size)) {
+  			// console.log(counter)
   			// Go back and replace the most-recently placed word
   			if (rowOrCol > 0) {
 	  			rowOrCol--; // Get back
-	  			const mostRecentOp = writeOps.slice(-1)[0];
+	  			const mostRecentOp = writeOps.pop();
 	  			mostRecentOp.forEach(location => {
 	  				board[location[0]][location[1]] = "";
 	  			});
+
+	  			if (rowOrCol % 2 === 0) { // Clear row
+	  				row--;
+	  			} else { // Clear col
+	  				col--;
+	  			}
+
+
 	  			// if (rowOrCol % 2 === 0) {
 	  			// 	// Clear row
 	  			// 	row--;
@@ -192,6 +201,7 @@ class App extends Component {
 		  		// console.log(rowOrCol, row, col)
 	  			wordCounter++;
 	  		}
+	  		wordCounter = 0;
 	  		counter++;
 	  	}
 

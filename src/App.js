@@ -106,21 +106,29 @@ class App extends Component {
   		let rowOrCol = 0;
   		let foundWord = false;
   		let counter = 0;
-  		while (counter < 2 && (row < this.state.size || col < this.state.size)) {
+  		let writeOps = [];
+  		while (counter < 3 && (row < this.state.size || col < this.state.size)) {
   			// Go back and replace the most-recently placed word
   			if (rowOrCol > 0) {
 	  			rowOrCol--; // Get back
-	  			for (let i = 0; i < this.state.size; i++) {
-	  				if (rowOrCol % 2 === 0) { // Clear row
-	  					row--;
-	  					console.log(row)
-	  					board[row][i] = "";
-	  				} else { // Clear col
-	  					col--;
-	  					console.log(col)
-	  					board[i][row] = "";
-	  				}
-	  			}
+	  			const mostRecentOp = writeOps.slice(-1)[0];
+	  			mostRecentOp.forEach(location => {
+	  				board[location[0]][location[1]] = "";
+	  			});
+	  			// if (rowOrCol % 2 === 0) {
+	  			// 	// Clear row
+	  			// 	row--;
+	  			// 	for (let i = 0; i < this.state.size; i++) {
+	  			// 		console.log(row)
+	  			// 		board[row][i] = "";
+	  			// 	}
+	  			// } else { // Clear col
+	  			// 	col--;
+	  			// 	for (let i = 0; i < this.state.size; i++) {
+	  			// 		console.log(col)
+	  			// 		board[i][row] = "";
+	  			// 	}
+	  			// }
 	  		}
 
 	  		while (wordCounter < sortedWords.length && (row < this.state.size || col < this.state.size)) {
@@ -134,18 +142,26 @@ class App extends Component {
 	  			if (word.length === this.state.size) { // Fits in board (in simplified nxn case)
 	  				// Check that the word works with the rest of the board
 	  				let fits = true;
+	  				let writeOpRow = [];
 	  				for (let i = 0; i < word.length; i++) {
 	  					let boardLetter;
 	  					if (rowOrCol % 2 === 0) { // Trying a row
 	  						boardLetter = board[row][i];
+	  						if (boardLetter == "") {
+	  							writeOpRow.push([row, i])
+	  						}
 	  					} else { // Trying a col
 	  						boardLetter = board[i][col];
+	  						if (boardLetter == "") {
+	  							writeOpRow.push([i, col])
+	  						}
 	  					}
 	  					// console.log(rowOrCol, word, boardLetter, word[i])
 	  					if (boardLetter != "" && boardLetter != word[i]) fits = false;
 	  				}
 
 	  				if (fits) { // If the word was placed/is able to be placed
+	  					writeOps.push(writeOpRow);
 	  					for (let i = 0; i < word.length; i++) {
 		  					if (rowOrCol % 2 === 0) { // Trying a row
 		  						board[row][i] = word[i];
@@ -155,7 +171,7 @@ class App extends Component {
 		  				}
 		  				foundWord = true;
 	  				}
-	  				console.log(board)
+	  				// console.log(board)
 	  			}
 
 	  			if (foundWord) {
@@ -173,7 +189,7 @@ class App extends Component {
 		  			foundWord = false;
 		  		}
 
-		  		console.log(rowOrCol, row, col)
+		  		// console.log(rowOrCol, row, col)
 	  			wordCounter++;
 	  		}
 	  		counter++;

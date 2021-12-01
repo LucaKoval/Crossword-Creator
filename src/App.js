@@ -67,18 +67,74 @@ class App extends Component {
   			// Go back and replace the most-recently placed word
   			if (rowOrCol > 0) {
 	  			rowOrCol--; // Get back
-	  			const mostRecentOp = writeOps.pop();
-	  			mostRecentOp.forEach(location => {
-	  				board[location[0]][location[1]] = "";
-	  			});
-
-	  			TimesUsed[mostRecentOp[0][2]] -= 1;
 
 	  			if (rowOrCol % 2 === 0) { // Clear row
-	  				row--;
+	  				// get # rows to clear
+	  				const amountToClear = Math.floor(Math.random() * row) + 1;
+
+	  				let wordsErased = [];
+
+	  				// clear rows w/ bound from columns
+	  				for (let i = 0; i < amountToClear; i++) {
+	  					let wordToErase = "";
+	  					for (let j = 0; j < this.state.size; j++) {
+	  						wordToErase += board[row-(i+1)][j];
+	  					}
+	  					wordsErased.push(wordToErase);
+
+	  					for (let j = col; j < this.state.size; j++) {
+	  						board[row-(i+1)][j] = "";
+	  					}
+	  				}
+
+	  				// reduce rows by proper amount
+	  				row -= amountToClear;
+
+	  				// get words erased, reduce times used by 1
+	  				wordsErased.forEach(word => {
+	  					TimesUsed[word]--;
+	  				});
 	  			} else { // Clear col
-	  				col--;
+	  				// get # cols to clear
+	  				const amountToClear = Math.floor(Math.random() * col) + 1;
+
+	  				let wordsErased = [];
+
+	  				// clear cols w/ bound from rows
+	  				for (let j = 0; j < amountToClear; j++) {
+	  					let wordToErase = "";
+	  					for (let i = 0; i < this.state.size; i++) {
+	  						wordToErase += board[i][col-(j+1)];
+	  					}
+	  					wordsErased.push(wordToErase);
+
+	  					for (let i = row; i < this.state.size; i++) {
+	  						board[i][col-(j+1)] = "";
+	  					}
+	  				}
+
+	  				// reduce cols by proper amount
+	  				col -= amountToClear;
+
+	  				// get words erased, reduce times used by 1
+	  				wordsErased.forEach(word => {
+	  					TimesUsed[word]--;
+	  				});
 	  			}
+
+
+	  			// const mostRecentOp = writeOps.pop();
+	  			// mostRecentOp.forEach(location => {
+	  			// 	board[location[0]][location[1]] = "";
+	  			// });
+
+	  			// TimesUsed[mostRecentOp[0][2]]--;
+
+	  			// if (rowOrCol % 2 === 0) { // Clear row
+	  			// 	row--;
+	  			// } else { // Clear col
+	  			// 	col--;
+	  			// }
 	  		}
 
 	  		while (wordCounter < sortedWords.length && (row < this.state.size || col < this.state.size)) {
@@ -129,7 +185,7 @@ class App extends Component {
 			  					}
 			  				}
 			  				foundWord = true;
-			  				TimesUsed[word] += 1;
+			  				TimesUsed[word]++;
 		  				}
 	  				}
 	  			}

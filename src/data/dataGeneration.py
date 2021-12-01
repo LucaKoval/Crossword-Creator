@@ -3,7 +3,7 @@ dictionary = json.load(open('dictionary_compact.json'))
 sortedWords = []
 
 for word in dictionary:
-	if (word[0] != '-'):
+	if (not "-" in word) and (not " " in word):
 		sortedWords.append(word)
 
 sortedWords.sort()

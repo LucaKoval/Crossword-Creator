@@ -107,9 +107,9 @@ class App extends Component {
   		let foundWord = false;
   		let counter = 0;
   		let writeOps = [];
-  		// while (counter < 1000 && (row < this.state.size || col < this.state.size)) {
-  		while (row < this.state.size || col < this.state.size) {
-  			// console.log(counter)
+  		console.log(sortedWords)
+  		while (counter < 100 && (row < this.state.size || col < this.state.size)) {
+  		// while (row < this.state.size || col < this.state.size) {
   			// Go back and replace the most-recently placed word
   			if (rowOrCol > 0) {
 	  			rowOrCol--; // Get back
@@ -123,22 +123,6 @@ class App extends Component {
 	  			} else { // Clear col
 	  				col--;
 	  			}
-
-
-	  			// if (rowOrCol % 2 === 0) {
-	  			// 	// Clear row
-	  			// 	row--;
-	  			// 	for (let i = 0; i < this.state.size; i++) {
-	  			// 		console.log(row)
-	  			// 		board[row][i] = "";
-	  			// 	}
-	  			// } else { // Clear col
-	  			// 	col--;
-	  			// 	for (let i = 0; i < this.state.size; i++) {
-	  			// 		console.log(col)
-	  			// 		board[i][row] = "";
-	  			// 	}
-	  			// }
 	  		}
 
 	  		while (wordCounter < sortedWords.length && (row < this.state.size || col < this.state.size)) {
@@ -166,7 +150,7 @@ class App extends Component {
 	  							writeOpRow.push([i, col])
 	  						}
 	  					}
-	  					// console.log(rowOrCol, word, boardLetter, word[i])
+
 	  					if (boardLetter != "" && boardLetter != word[i]) fits = false;
 	  				}
 
@@ -181,7 +165,6 @@ class App extends Component {
 		  				}
 		  				foundWord = true;
 	  				}
-	  				// console.log(board)
 	  			}
 
 	  			if (foundWord) {
@@ -198,8 +181,7 @@ class App extends Component {
 		  			}
 		  			foundWord = false;
 		  		}
-
-		  		// console.log(rowOrCol, row, col)
+		  		
 	  			wordCounter++;
 	  		}
 	  		wordCounter = 0;

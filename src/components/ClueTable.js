@@ -31,7 +31,7 @@ class ClueTable extends Component {
 	  						key={"cell "+i+""+j}
 	  					>
 	  						<div className={styles.cell}>
-	  							{j === 0 ? clueNumber : data[i]}
+	  							{j === 0 ? clueNumber : data[i].slice(0, 30)}
 	  						</div>
 	  					</div>
 	  				)

@@ -197,7 +197,29 @@ class App extends Component {
 	  		counter++;
 	  	}
 
-  		this.setState({ data: board });
+	  	// Get clues, aka definitions
+	  	let clues = [];
+	  	let rowDefinitions = [];
+	  	let colDefinitions = [];
+
+	  	// Get words
+	  	for (let i = 0; i < this.state.size; i++) {
+	  		let rowWord = "";
+	  		let colWord = "";
+
+	  		for (let j = 0; j < this.state.size; j++) {
+	  			rowWord += board[i][j];
+	  			colWord += board[j][i];
+	  		}
+	  		const rowDefinition = Dictionary[rowWord];
+	  		rowDefinitions.push(rowDefinition);
+	  		const colDefinition = Dictionary[colWord];
+	  		colDefinitions.push(colDefinition);
+	  	}
+	  	clues = clues.concat(colDefinitions);
+	  	clues = clues.concat(rowDefinitions);
+
+  		this.setState({ data: board, clues: clues });
   	}
 
   	render() {

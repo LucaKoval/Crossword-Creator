@@ -23,70 +23,20 @@ class App extends Component {
   	}
 
   	componentDidMount() {
-  		// put in generate data
-  		// console.log(Dictionary["apple"].split(".")[1])
-  		// let i = 0
-  		// for (const word in Dictionary) {
-  		// 	console.log(word)
-  		// 	i++
-  		// 	if (i > 30) break
-  		// }
-
   		const sortedWords = SortedWords["text"];
   		this.setState({ sortedWords: sortedWords });
 
-  		// Create the initial empty board
-  		// let board = [];
-  		// for (let i = 0; i < this.state.size; i++) {
-  		// 	let row = [];
-  		// 	for (let j = 0; j < this.state.size; j++) {
-  		// 		row.push("");
-  		// 	}
-  		// 	board.push(row);
-  		// }
-  		// this.setState({ data: board });
-
+  		// Have this not done initially so page can load in
   		this.generateData();
   	}
 
   	generateData = () => {
-  		// let size = this.state.size;
-  		// let clues = [];
-  		// for (let i = 0; i < size * 2; i++) {
-  		// 	let clue = "Test clue";
-  		// 	clues.push(clue);
-  		// }
-  		// this.setState({ clues: clues });
-
-  		// let data = [];
-  		// for (let i = 0; i < size; i++) {
-  		// 	let row = [];
-  		// 	for (let j = 0; j < size; j++) {
-  		// 		row.push(Math.floor(Math.random() * size * size));
-  		// 	}
-  		// 	data.push(row);
-  		// }
-  		// this.setState({ data: data });
-
   		let sortedWords;
   		if (this.state.sortedWords.length === 0) {
 			sortedWords = SortedWords["text"];
   		} else {
   			sortedWords = this.state.sortedWords;
   		}
-
-  		// let board = [];
-  		// if (this.state.data.length === 0) {
-  		// 	for (let i = 0; i < this.state.size; i++) {
-	  	// 		let row = [];
-	  	// 		for (let j = 0; j < this.state.size; j++) {
-	  	// 			row.push("");
-	  	// 		}
-	  	// 		board.push(row);
-	  	// 	}
-  		// } else {
-  		// 	board = this.state.data;
-  		// }
 
   		let board = [];
   		for (let i = 0; i < this.state.size; i++) {
@@ -107,7 +57,7 @@ class App extends Component {
   		let foundWord = false;
   		let counter = 0;
   		let writeOps = [];
-  		while (counter < 100 && (row < this.state.size || col < this.state.size)) {
+  		while (counter < 2000 && (row < this.state.size || col < this.state.size)) {
   		// while (row < this.state.size || col < this.state.size) {
   			// Go back and replace the most-recently placed word
   			if (rowOrCol > 0) {
@@ -191,9 +141,6 @@ class App extends Component {
   	}
 
   	render() {
-  		// const sortedWords = this.state.sortedWords;
-  		// const board = this.state.data;
-
   		return(
   			<div className={styles.container}>
   				<div className={styles.contentContainer}>

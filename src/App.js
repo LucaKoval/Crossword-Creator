@@ -6,6 +6,7 @@ import ClueTable from './components/ClueTable';
 import Crossword from './components/Crossword';
 import ProblemInput from './components/ProblemInput';
 import SortedWords from './data/sortedWords';
+import TimesUsed from './data/timesUsed';
 
 // Dictionary is from https://github.com/matthewreagan/WebstersEnglishDictionary
 import Dictionary from './data/dictionary_compact';
@@ -71,6 +72,8 @@ class App extends Component {
 	  				board[location[0]][location[1]] = "";
 	  			});
 
+	  			TimesUsed[mostRecentOp[0][2]] -= 1;
+
 	  			if (rowOrCol % 2 === 0) { // Clear row
 	  				row--;
 	  			} else { // Clear col
@@ -86,7 +89,7 @@ class App extends Component {
 	  			}
 	  			const word = sortedWords[wordCounter];
 
-	  			if (word.length === this.state.size) { // Fits in board (in simplified nxn case)
+	  			if (word.length === this.state.size && TimesUsed[word] === 0) { // Fits in board (in simplified nxn case)
 	  				// Go through probabilistic rejection
 	  				let frequenciesProduct = 1;
 	  				let frequenciesDenom = this.state.frequenciesDenom;
@@ -104,12 +107,12 @@ class App extends Component {
 		  					if (rowOrCol % 2 === 0) { // Trying a row
 		  						boardLetter = board[row][i];
 		  						if (boardLetter == "") {
-		  							writeOpRow.push([row, i])
+		  							writeOpRow.push([row, i, word])
 		  						}
 		  					} else { // Trying a col
 		  						boardLetter = board[i][col];
 		  						if (boardLetter == "") {
-		  							writeOpRow.push([i, col])
+		  							writeOpRow.push([i, col, word])
 		  						}
 		  					}
 
@@ -117,7 +120,6 @@ class App extends Component {
 		  				}
 
 		  				if (fits) { // If the word was placed/is able to be placed
-		  					// console.log(word, frequenciesProduct)
 		  					writeOps.push(writeOpRow);
 		  					for (let i = 0; i < word.length; i++) {
 			  					if (rowOrCol % 2 === 0) { // Trying a row
@@ -127,9 +129,8 @@ class App extends Component {
 			  					}
 			  				}
 			  				foundWord = true;
+			  				TimesUsed[word] += 1;
 		  				}
-	  				} else {
-	  					// console.log("rejected", word, frequenciesProduct)
 	  				}
 	  			}
 

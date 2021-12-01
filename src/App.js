@@ -107,7 +107,8 @@ class App extends Component {
   		let foundWord = false;
   		let counter = 0;
   		let writeOps = [];
-  		while (counter < 1000 && (row < this.state.size || col < this.state.size)) {
+  		// while (counter < 1000 && (row < this.state.size || col < this.state.size)) {
+  		while (row < this.state.size || col < this.state.size) {
   			// console.log(counter)
   			// Go back and replace the most-recently placed word
   			if (rowOrCol > 0) {

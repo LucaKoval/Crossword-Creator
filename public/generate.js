@@ -8,7 +8,7 @@ onmessage = function(e) {
   	let col = 0;
   	let rowOrCol = 0;
   	let foundWord = false;
-  	let counter = 0;
+  	// let counter = 0;
   	// while (counter < 2000 && (row < size || col < size)) {
   	while (row < size || col < size) {
   		// Go back and replace the most-recently placed word
@@ -134,7 +134,7 @@ onmessage = function(e) {
 			wordCounter++;
 		}
 		wordCounter = 0;
-		counter++;
+		// counter++;
 	}
 
 	// Get clues, aka definitions

@@ -31,13 +31,6 @@ class App extends Component {
   		const sortedWords = SortedWords["text"];
   		this.setState({ sortedWords: sortedWords });
 
-  		// console.log(Frequencies["a"])
-  		// console.log(Frequencies["-"])
-
-  		// Have this not done initially so page can load in
-  		// this.generateData();
-
-
 		this.setState({ sortedWords: SortedWords["text"] });
   		this.clearBoard();
   	}
@@ -136,11 +129,12 @@ class App extends Component {
 	  			const word = sortedWords[wordCounter];
 
 	  			if (word.length === this.state.size && TimesUsed[word] === 0) { // Fits in board (in simplified nxn case)
-	  				// Go through probabilistic rejection
+	  				// Go through probabilistic acceptance
 	  				let frequenciesProduct = 1;
 	  				let frequenciesDenom = this.state.frequenciesDenom;
 	  				word.split("").forEach(letter => {
-	  					frequenciesProduct *= Frequencies[letter]/frequenciesDenom;
+	  					const freq = Frequencies[letter] === undefined ? 0 : Frequencies[letter]/frequenciesDenom;
+	  					frequenciesProduct *= freq;
 	  				});
 
 	  				// The higher the frequency, the lower the chance of rejecting and the higher the chance of accepting

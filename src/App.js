@@ -61,7 +61,6 @@ class App extends Component {
   		let rowOrCol = 0;
   		let foundWord = false;
   		let counter = 0;
-  		let writeOps = [];
   		// while (counter < 2000 && (row < this.state.size || col < this.state.size)) {
   		while (row < this.state.size || col < this.state.size) {
   			// Go back and replace the most-recently placed word
@@ -143,26 +142,18 @@ class App extends Component {
 	  				if (Math.random() < frequenciesProduct*100) { // Accept
 	  					// Check that the word works with the rest of the board
 		  				let fits = true;
-		  				let writeOpRow = [];
 		  				for (let i = 0; i < word.length; i++) {
 		  					let boardLetter;
 		  					if (rowOrCol % 2 === 0) { // Trying a row
 		  						boardLetter = board[row][i];
-		  						if (boardLetter == "") {
-		  							writeOpRow.push([row, i, word])
-		  						}
 		  					} else { // Trying a col
 		  						boardLetter = board[i][col];
-		  						if (boardLetter == "") {
-		  							writeOpRow.push([i, col, word])
-		  						}
 		  					}
 
 		  					if (boardLetter != "" && boardLetter != word[i]) fits = false;
 		  				}
 
 		  				if (fits) { // If the word was placed/is able to be placed
-		  					writeOps.push(writeOpRow);
 		  					for (let i = 0; i < word.length; i++) {
 			  					if (rowOrCol % 2 === 0) { // Trying a row
 			  						board[row][i] = word[i];

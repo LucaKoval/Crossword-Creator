@@ -31,18 +31,18 @@ class App extends Component {
   		const sortedWords = SortedWords["text"];
   		this.setState({ sortedWords: sortedWords });
 
+  		// console.log(Frequencies["a"])
+  		// console.log(Frequencies["-"])
+
   		// Have this not done initially so page can load in
-  		this.generateData();
+  		// this.generateData();
+
+
+		this.setState({ sortedWords: SortedWords["text"] });
+  		this.clearBoard();
   	}
 
-  	generateData = () => {
-  		let sortedWords;
-  		if (this.state.sortedWords.length === 0) {
-			sortedWords = SortedWords["text"];
-  		} else {
-  			sortedWords = this.state.sortedWords;
-  		}
-
+  	clearBoard() {
   		let board = [];
   		for (let i = 0; i < this.state.size; i++) {
   			let row = [];
@@ -51,8 +51,13 @@ class App extends Component {
   			}
   			board.push(row);
   		}
-  		// REMOVE LINE BELOW?
   		this.setState({ data: board });
+  	}
+
+  	generateData = () => {
+  		const sortedWords = this.state.sortedWords;
+  		this.clearBoard();
+  		const board = this.state.data;
 
   		// Do DFS, fill the board
   		let wordCounter = 0;

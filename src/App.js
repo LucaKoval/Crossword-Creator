@@ -5,6 +5,15 @@ import styles from './styles/App.module.css';
 import ClueTable from './components/ClueTable';
 import Crossword from './components/Crossword';
 import ProblemInput from './components/ProblemInput';
+import SortedWords from './data/sortedWords';
+import TimesUsed from './data/timesUsed';
+// import Worker from "./workers/generate.js";
+
+// Dictionary is from https://github.com/matthewreagan/WebstersEnglishDictionary
+import Dictionary from './data/dictionary_compact';
+
+// Frequencies is from http://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
+import Frequencies from './data/frequencies';
 
 class App extends Component {
   	constructor(props) {
@@ -14,31 +23,63 @@ class App extends Component {
     		size: 4,
     		clues: [],
     		data: [],
+    		sortedWords: [],
+    		frequenciesDenom: 40000,
+    		worker: undefined,
     	};
   	}
 
   	componentDidMount() {
-  		this.generateData();
+  		const sortedWords = SortedWords["text"];
+  		this.setState({ sortedWords: sortedWords });
+
+		this.setState({ sortedWords: SortedWords["text"] });
+  		this.setState({ data: this.generateClearBoard() });
+  	}
+
+  	generateClearBoard() {
+  		let board = [];
+  		for (let i = 0; i < this.state.size; i++) {
+  			let row = [];
+  			for (let j = 0; j < this.state.size; j++) {
+  				row.push("");
+  			}
+  			board.push(row);
+  		}
+  		return board;
   	}
 
   	generateData = () => {
-  		let size = this.state.size;
-  		let clues = [];
-  		for (let i = 0; i < size * 2; i++) {
-  			let clue = "Test clue";
-  			clues.push(clue);
-  		}
-  		this.setState({ clues: clues });
+  		const clearBoard = this.generateClearBoard()
 
-  		let data = [];
-  		for (let i = 0; i < size; i++) {
-  			let row = [];
-  			for (let j = 0; j < size; j++) {
-  				row.push(Math.floor(Math.random() * size * size));
-  			}
-  			data.push(row);
+
+  		let oldWorker = this.state.worker;
+  		if (oldWorker !== undefined) {
+	  		oldWorker.terminate();
+	  		oldWorker = undefined;
+	  		this.setState({ worker: oldWorker });
+	  	}
+
+  		let worker = new window.Worker("./generate.js");
+  		this.setState({ worker: worker });
+  		worker.postMessage({ 
+  			sortedWords: this.state.sortedWords,
+  			board: clearBoard,
+  			size: this.state.size,
+  			TimesUsed: TimesUsed,
+  			Frequencies: Frequencies,
+  			frequenciesDenom: this.state.frequenciesDenom,
+  			Dictionary: Dictionary,
+  		});
+
+  		let thisComponent = this;
+  		worker.onmessage = function(e) {
+  			thisComponent.setState({ data: e.data.data, clues: e.data.clues });
+
+  			worker.terminate();
+  			worker = undefined;
+  			thisComponent.setState({ worker: worker });
   		}
-  		this.setState({ data: data });
   	}
 
   	render() {

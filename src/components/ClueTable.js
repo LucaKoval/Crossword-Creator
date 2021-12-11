@@ -30,8 +30,9 @@ class ClueTable extends Component {
 	  						className={styles.cellContainer}
 	  						key={"cell "+i+""+j}
 	  					>
-	  						<div className={styles.cell}>
-	  							{j == 0 ? clueNumber : data[i]}
+	  						{/* Conditional styling example from https://www.pluralsight.com/guides/applying-classes-conditionally-react */}
+	  						<div className={`styles.cell ${j === 0 ? styles.headerCell : styles.dataCell}`}>
+	  							{j === 0 ? clueNumber : data[i].slice(0, 30)}
 	  						</div>
 	  					</div>
 	  				)

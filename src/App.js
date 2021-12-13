@@ -51,6 +51,7 @@ class App extends Component {
   	}
 
   	generateData = () => {
+			const startTime = Math.trunc(performance.now());
 			this.setState({ inProgress: true });
   		const clearBoard = this.generateClearBoard()
 
@@ -76,12 +77,19 @@ class App extends Component {
 
   		let thisComponent = this;
   		worker.onmessage = function(e) {
-  			thisComponent.setState({ data: e.data.data, clues: e.data.clues });
+				const endTime = Math.trunc(performance.now());
+				const totalTime = (endTime-startTime)/1000;
 
-  			worker.terminate();
+				worker.terminate();
   			worker = undefined;
-  			thisComponent.setState({ worker: worker });
-				thisComponent.setState({ inProgress: false });
+
+  			thisComponent.setState({ 
+					data: e.data.data, 
+					clues: e.data.clues,
+					inProgress: false,
+					worker: worker,
+					generationTime: totalTime,
+				});
   		}
   	}
 
@@ -112,7 +120,7 @@ class App extends Component {
 	        	</div>
 						<p>
 
-							Time to generate: {this.state.generationTime}
+							Time to generate: {this.state.generationTime} seconds
 						</p>
   			</div>
   		);

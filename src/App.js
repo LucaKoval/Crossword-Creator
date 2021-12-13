@@ -4,7 +4,6 @@ import './styles/global.css';
 import styles from './styles/App.module.css';
 import ClueTable from './components/ClueTable';
 import Crossword from './components/Crossword';
-import ProblemInput from './components/ProblemInput';
 import SortedWords from './data/sortedWords';
 import TimesUsed from './data/timesUsed';
 // import Worker from "./workers/generate.js";
@@ -26,6 +25,8 @@ class App extends Component {
     		sortedWords: [],
     		frequenciesDenom: 40000,
     		worker: undefined,
+				inProgress: false,
+				generationTime: 0,
     	};
   	}
 
@@ -50,6 +51,7 @@ class App extends Component {
   	}
 
   	generateData = () => {
+			this.setState({ inProgress: true });
   		const clearBoard = this.generateClearBoard()
 
 
@@ -79,6 +81,7 @@ class App extends Component {
   			worker.terminate();
   			worker = undefined;
   			thisComponent.setState({ worker: worker });
+				thisComponent.setState({ inProgress: false });
   		}
   	}
 
@@ -100,14 +103,17 @@ class App extends Component {
 	  				<div className="buttonContainer">
 	            		<input
 	              			type="Submit"
-	              			className="button"
-	              			value="Generate"
+	              			className={this.state.inProgress?"inactiveButton":"button"}
+	              			value={this.state.inProgress?"In progress":"Generate new"}
 	              			onClick={this.generateData}
 	            		/>
-	            		<div className="buttonShadow" />
+	            		<div className={this.state.inProgress?"inactiveShadow":"buttonShadow"} />
 	          		</div>
-	          		<ProblemInput />
 	        	</div>
+						<p>
+
+							Time to generate: {this.state.generationTime}
+						</p>
   			</div>
   		);
   	}

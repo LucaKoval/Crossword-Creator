@@ -8,16 +8,20 @@ onmessage = function(e) {
   	let col = 0;
   	let rowOrCol = 0;
   	let foundWord = false;
+  	let blockedSquare = -1;
+  	let foundFirstWord = false;
+  	let foundSecondWord = false;
   	// let counter = 0;
   	// while (counter < 2000 && (row < size || col < size)) {
   	while (row < size || col < size) {
   		// Go back and replace the most-recently placed word
   		if (rowOrCol > 0) {
+  			console.log(board)
 			rowOrCol--; // Get back
 
 			if (rowOrCol % 2 === 0) { // Clear row
 				// get # rows to clear
-				const amountToClear = Math.floor(Math.random() * row) + 1;
+				const amountToClear = row === 0 ? 0 : Math.floor(Math.random() * row) + 1;
 
 				let wordsErased = [];
 
@@ -35,7 +39,7 @@ onmessage = function(e) {
 				}
 
 				// reduce rows by proper amount
-				row -= amountToClear;
+				if (row > 0) row -= amountToClear;
 
 				// get words erased, reduce times used by 1
 				wordsErased.forEach(word => {
@@ -61,27 +65,45 @@ onmessage = function(e) {
 				}
 
 				// reduce cols by proper amount
-				col -= amountToClear;
+				if (col > 0) col -= amountToClear;
 
 				// get words erased, reduce times used by 1
 				wordsErased.forEach(word => {
 					TimesUsed[word]--;
 				});
 			}
+			console.log(row, col)
 		}
 
+		// Go through dictionary to try and find a word that fits
+		// console.log(wordCounter, row, col, wordCounter < sortedWords.length && (row < size || col < size))
 		while (wordCounter < sortedWords.length && (row < size || col < size)) {
-			// Randomization
+			// Randomization of word in dictionary to try
 			if (Math.random() < 0.35) {
 				// Random int example from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 				wordCounter = Math.floor(Math.random() * sortedWords.length)
 			}
 			const word = sortedWords[wordCounter];
 
-			if (word.length === size && TimesUsed[word] === 0) { // Fits in board (in simplified nxn case)
+			// Chance to throw in blocked square
+			if (blockedSquare === -1 && Math.random() < 0.25) {
+				// console.log('asdf')
+				// Find where in the row/col the blocked square will go
+				blockedSquare = Math.floor(Math.random() * size); // Generates between 0 and (size - 1), inclusive
+			}
+
+			if (blockedSquare === 0) {
+				foundFirstWord = true;
+			}
+
+			// console.log(blockedSquare)
+			// console.log(word)
+
+			if (((blockedSquare === -1 && word.length === size) || (blockedSquare !== -1 && !foundFirstWord && word.length === blockedSquare) || (blockedSquare !== -1 && foundFirstWord && word.length === size - blockedSquare - 1)) && TimesUsed[word] === 0) { // Fits in board (in simplified nxn case)
+				// console.log((blockedSquare === -1 && word.length === size), (blockedSquare !== -1 && !foundFirstWord && word.length === blockedSquare), (blockedSquare !== -1 && foundFirstWord && word.length === size - blockedSquare - 1))
+				console.log(blockedSquare, foundFirstWord, foundSecondWord, word)
 				// Go through probabilistic acceptance
 				let frequenciesProduct = 1;
-				// let frequenciesDenom = this.state.frequenciesDenom;
 				word.split("").forEach(letter => {
 					const freq = Frequencies[letter] === undefined ? 0 : Frequencies[letter]/frequenciesDenom;
 					frequenciesProduct *= freq;
@@ -91,7 +113,25 @@ onmessage = function(e) {
 				if (Math.random() < frequenciesProduct*100) { // Accept
 					// Check that the word works with the rest of the board
 	  				let fits = true;
-	  				for (let i = 0; i < word.length; i++) {
+
+	  				// Need to figure out the beginning and end of the word
+	  				let beginning;
+	  				let end;
+	  				if (blockedSquare === -1) { // If there is no blocked square
+	  					beginning = 0;
+	  					end = size;
+	  				} else { // If there is a blocked square
+	  					if (!foundFirstWord) { // Trying to find the first word
+	  						beginning = 0;
+	  						end = blockedSquare;
+	  					} else { // Trying to find the second word
+	  						beginning = blockedSquare + 1;
+	  						end = size;
+	  					}
+	  				}
+
+	  				let wordIndexShift = (blockedSquare !== -1 && foundFirstWord) ? (blockedSquare + 1) : 0
+	  				for (let i = beginning; i < end; i++) {
 	  					let boardLetter;
 	  					if (rowOrCol % 2 === 0) { // Trying a row
 	  						boardLetter = board[row][i];
@@ -99,38 +139,94 @@ onmessage = function(e) {
 	  						boardLetter = board[i][col];
 	  					}
 
-	  					if (boardLetter != "" && boardLetter != word[i]) fits = false;
+	  					if (boardLetter != "" && boardLetter != word[i - wordIndexShift]) fits = false;
 	  				}
 
 	  				if (fits) { // If the word was placed/is able to be placed
-	  					for (let i = 0; i < word.length; i++) {
+	  					console.log('fits')
+	  					// if (blockedSquare !== -1) {
+			  			// 	if (!foundFirstWord) {
+			  			// 		console.log("beginning, end: ", beginning, end)
+				  		// 	}
+				  		// }
+	  					for (let i = beginning; i < end; i++) {
+
+	  						if (blockedSquare !== -1) {
+			  					if (!foundFirstWord) {
+			  						console.log(word[i - wordIndexShift], i - wordIndexShift)
+			  						console.log(row, col, i)
+				  				}
+				  			}
+
+
+
 		  					if (rowOrCol % 2 === 0) { // Trying a row
-		  						board[row][i] = word[i];
+		  						console.log('setting with ' + word[i - wordIndexShift])
+		  						board[row][i] = word[i - wordIndexShift];
+		  						console.log(board[row][i])
+		  						console.log(board, board[0][0], board[0][1], board[1][0], board[1][1])
 		  					} else { // Trying a col
-		  						board[i][col] = word[i];
+		  						console.log('setting with ' + word[i - wordIndexShift])
+		  						board[i][col] = word[i - wordIndexShift];
+		  						console.log(board[i][col])
+		  						console.log(board, board[0][0], board[0][1], board[1][0], board[1][1])
 		  					}
 		  				}
 		  				foundWord = true;
 		  				TimesUsed[word]++;
+
+		  				// Logic for finding words in row/col with a blocked square
+		  				if (blockedSquare !== -1) {
+		  					if (!foundFirstWord) {
+		  						console.log('setting foundFirstWord to true')
+		  						console.log(board)
+			  					foundFirstWord = true;
+
+			  					// The blocked square is on one of the edges of the board
+			  					if (blockedSquare === 1 || blockedSquare === size - 1) {
+			  						foundSecondWord = true;
+			  					}
+			  				} else { // We have already found a first word, we must have found the second
+			  					console.log('setting foundSecondWord to true')
+			  					foundSecondWord = true;
+			  				}
+			  			}
 	  				}
 				}
 			}
 
-			if (foundWord) {
-	  			if (rowOrCol % 2 === 0) { // Filled in a row
-	  				if (col < size) { // We haven't filled all columns, so switch rowOrCol
-	  					rowOrCol++;
-	  				}
-	  				row++;
-	  			} else { // Filled in a col
-	  				if (row < size) { // We haven't filled all rows, so switch rowOrCol
-	  					rowOrCol++;
-	  				}
-	  				col++;
-	  			}
+			if (foundWord && (blockedSquare === -1 || (blockedSquare !== -1 && foundSecondWord))) {
+				console.log('bruh: ', foundWord, blockedSquare, foundFirstWord, foundSecondWord)
+				console.log(row, col)
+
+				if (size === 1) { // Edge case where game board is 1x1
+					row = 1;
+					col = 1;
+				} else {
+		  			if (rowOrCol % 2 === 0) { // Filled in a row
+		  				if (col < size) { // We haven't filled all columns, so switch rowOrCol
+		  					rowOrCol++;
+		  				}
+		  				row++;
+		  			} else { // Filled in a col
+		  				if (row < size) { // We haven't filled all rows, so switch rowOrCol
+		  					rowOrCol++;
+		  				}
+		  				col++;
+		  			}
+		  		}
+
+		  		console.log(row, col)
+
 	  			foundWord = false;
+	  			foundFirstWord = false;
+	  			foundSecondWord = false;
 	  		}
 
+	  		// If we didn't find any words that worked for the blocked square, reset it
+	  		if (blockedSquare !== -1 && !foundFirstWord) {
+	  			blockedSquare = -1;
+	  		}
 			wordCounter++;
 		}
 		wordCounter = 0;

@@ -7,7 +7,6 @@ import Crossword from './components/Crossword';
 import ProblemInput from './components/ProblemInput';
 import SortedWords from './data/sortedWords';
 import TimesUsed from './data/timesUsed';
-// import Worker from "./workers/generate.js";
 
 // Dictionary is from https://github.com/matthewreagan/WebstersEnglishDictionary
 import Dictionary from './data/dictionary_compact';
@@ -20,7 +19,7 @@ class App extends Component {
     	super(props);
 
     	this.state = {
-    		size: 4,
+    		size: 2,
     		clues: [],
     		data: [],
     		sortedWords: [],
@@ -87,9 +86,9 @@ class App extends Component {
   			<div className={styles.container}>
   				<div className={styles.contentContainer}>
   					<div className={styles.clueTableContainer}>
-  						<ClueTable
+  						{/*<ClueTable
   							data={this.state.clues}
-  						/>
+  						/>*/}
   					</div>
 	  				<div className={styles.crosswordContainer}>
 	  					<Crossword

@@ -12,9 +12,9 @@ class Crossword extends Component {
     	};
   	}
 
-  	board = () => {
-  		let data = this.props.data;
-  		if (data.length > 0) {
+  	boardGeneration = () => {
+  		let board = this.props.board;
+  		if (board.length > 0) {
 	  		let size = this.props.size;
 	  		let rows = [];
 	  		for (let i = 0; i < size; i++) {
@@ -26,7 +26,7 @@ class Crossword extends Component {
 	  						key={"cell "+i+""+j}
 	  					>
 	  						<div className={styles.cell}>
-	  							{data[i][j]}
+	  							{board[i][j]}
 	  						</div>
 	  					</div>
 	  				)
@@ -48,7 +48,7 @@ class Crossword extends Component {
   	render() {
   		return(
   			<div className={styles.container}>
-  				{this.board()}
+  				{this.boardGeneration()}
   			</div>
   		);
   	}

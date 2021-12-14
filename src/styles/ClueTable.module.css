@@ -2,8 +2,6 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	
-	padding: 100px;
 }
 
 .board {
@@ -20,9 +18,11 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+
+	width: 100%;
 }
 
-.cellContainer {
+.cell {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -37,10 +37,14 @@
 	justify-content: center;
 	align-items: center;
 
-	min-width: 128px;
+	min-width: 64px;
+	font-size: 14px;
 }
 
 .dataCell {
 	width: 100%;
 	border-right: none;
+	font-size: 14px;
+
+	border-right: 1px black solid;	
 }

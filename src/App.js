@@ -214,6 +214,11 @@ class App extends Component {
 	  						onChange={this.handleSizeChange}
 	  					/>
 	  				</div>
+	  				{ this.state.clues.length > 0 && <div className={styles.clueTableContainer}>
+  						<ClueTable
+  							data={this.state.clues}
+  						/>
+  					</div> }
 	  				<div className="buttonContainer">
 	            		<input
 	              			type="Submit"
@@ -223,38 +228,30 @@ class App extends Component {
 	            		/>
 	            		<div className={this.state.inProgress ? "inactiveShadow" : "buttonShadow"} />
 	          		</div>
-	          		<p>
-						Time to generate: {this.state.generationTime} seconds
-					</p>
-	          		{ this.state.clues.length > 0 && <div className={styles.clueTableContainer}>
-  						<ClueTable
-  							data={this.state.clues}
-  						/>
-  					</div> }
-						<div className="buttonContainer">
-							<input
-								type="Submit"
-								className={(this.state.manyProgress > 0)?"inactiveButton":"button"}
-								value={(this.state.manyProgress > 0)
-									? this.state.manyProgress + " in progress"
-									:"Generate new x10"}
-								onClick={this.generateManyData}
-							/>
-							<div className={(this.state.manyProgress > 0)?"inactiveShadow":"buttonShadow"} />
-	          </div>
-						<div className="statsContainer">
-							<p>Time to generate 1: {this.state.genTime} seconds</p>
-							<p>Words inserted for 1: {this.state.genInserted}</p>
-							<p>Words tested for 1: {this.state.genTested}</p>
-						</div>
-						<div className="statsContainer">
-							<p>Time to generate 10 (s): {this.printMany(this.state.manyTime)}</p>
-							{/* <p>Words inserted for 10: {this.printMany(this.state.manyInserted)}</p> */}
-							<p>Avg words inserted for 10: {this.avg(this.state.manyInserted)}</p>
-							{/* <p>Words tested for 10: {this.printMany(this.state.manyTested)}</p> */}
-							<p>Avg words tested for 10: {this.avg(this.state.manyTested)}</p>
-						</div>
-	        </div>
+					<div className="buttonContainer">
+						<input
+							type="Submit"
+							className={(this.state.manyProgress > 0)?"inactiveButton":"button"}
+							value={(this.state.manyProgress > 0)
+								? this.state.manyProgress + " in progress"
+								:"Generate new x10"}
+							onClick={this.generateManyData}
+						/>
+						<div className={(this.state.manyProgress > 0)?"inactiveShadow":"buttonShadow"} />
+	          		</div>
+					<div className="statsContainer">
+						<p>Time to generate 1: {this.state.genTime} seconds</p>
+						<p>Words inserted for 1: {this.state.genInserted}</p>
+						<p>Words tested for 1: {this.state.genTested}</p>
+					</div>
+					<div className="statsContainer">
+						<p>Time to generate 10 (s): {this.printMany(this.state.manyTime)}</p>
+						{/* <p>Words inserted for 10: {this.printMany(this.state.manyInserted)}</p> */}
+						<p>Avg words inserted for 10: {this.avg(this.state.manyInserted)}</p>
+						{/* <p>Words tested for 10: {this.printMany(this.state.manyTested)}</p> */}
+						<p>Avg words tested for 10: {this.avg(this.state.manyTested)}</p>
+					</div>
+	        	</div>
   			</div>
   		);
   	}

@@ -8,8 +8,8 @@ onmessage = function(e) {
   	let col = 0;
   	let rowOrCol = 0;
   	let foundWord = false;
-		let wordsChecked = 0; //counts words of the right length considered for insertion, whether or not they fit
-		let wordsInserted = 0; //counts only words actually inserted
+	let wordsChecked = 0; //counts words of the right length considered for insertion, whether or not they fit
+	let wordsInserted = 0; //counts only words actually inserted
   	// let counter = 0;
   	// while (counter < 2000 && (row < size || col < size)) {
   	while (row < size || col < size) {

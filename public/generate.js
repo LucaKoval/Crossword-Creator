@@ -8,6 +8,8 @@ onmessage = function(e) {
   	let col = 0;
   	let rowOrCol = 0;
   	let foundWord = false;
+		let wordsChecked = 0; //counts words of the right length considered for insertion, whether or not they fit
+		let wordsInserted = 0; //counts only words actually inserted
   	// let counter = 0;
   	// while (counter < 2000 && (row < size || col < size)) {
   	while (row < size || col < size) {
@@ -73,7 +75,7 @@ onmessage = function(e) {
 		}
 
 		while (wordCounter < sortedWords.length && (row < size || col < size)) {
-			// Occasionally jump location in the dictionary
+			// Occasionally jump to a random point in the dictionary
 			if (Math.random() < 0.35) {
 				// Random int example from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 				wordCounter = Math.floor(Math.random() * sortedWords.length)
@@ -81,6 +83,8 @@ onmessage = function(e) {
 			const word = sortedWords[wordCounter];
 
 			if (word.length === size && TimesUsed[word] === 0) { // Fits in board (in simplified nxn case)
+				wordsChecked++;
+				
 				// Go through probabilistic acceptance
 				let frequenciesProduct = 1;
 				word.split("").forEach(letter => {
@@ -114,6 +118,7 @@ onmessage = function(e) {
 		  				}
 		  				foundWord = true;
 		  				TimesUsed[word]++;
+							wordsInserted++;
 	  				}
 				}
 			}
@@ -161,5 +166,10 @@ onmessage = function(e) {
 	clues = clues.concat(colDefinitions);
 	clues = clues.concat(rowDefinitions);
 
-	postMessage({ data: board, clues: clues });
+	postMessage({ 
+		data: board, 
+		clues: clues, 
+		inserted: wordsInserted,
+		tested: wordsChecked,
+	});
 }

@@ -17,7 +17,8 @@ onmessage = function(e) {
 
 			if (rowOrCol % 2 === 0) { // Clear row
 				// get # rows to clear
-				const amountToClear = Math.floor(Math.random() * row) + 1;
+				//const amountToClear = Math.floor(Math.random() * row) + 1;
+				const amountToClear = 1;
 
 				let wordsErased = [];
 
@@ -43,7 +44,8 @@ onmessage = function(e) {
 				});
 			} else { // Clear col
 				// get # cols to clear
-				const amountToClear = Math.floor(Math.random() * col) + 1;
+				//const amountToClear = Math.floor(Math.random() * col) + 1;
+				const amountToClear = 1;
 
 				let wordsErased = [];
 
@@ -71,24 +73,25 @@ onmessage = function(e) {
 		}
 
 		while (wordCounter < sortedWords.length && (row < size || col < size)) {
-			// Randomization
-			if (Math.random() < 0.35) {
-				// Random int example from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-				wordCounter = Math.floor(Math.random() * sortedWords.length)
-			}
+			// Occasionally jump location in the dictionary
+			// if (Math.random() < 0.35) {
+			// 	// Random int example from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+			// 	wordCounter = Math.floor(Math.random() * sortedWords.length)
+			// }
 			const word = sortedWords[wordCounter];
 
 			if (word.length === size && TimesUsed[word] === 0) { // Fits in board (in simplified nxn case)
 				// Go through probabilistic acceptance
 				let frequenciesProduct = 1;
 				// let frequenciesDenom = this.state.frequenciesDenom;
-				word.split("").forEach(letter => {
-					const freq = Frequencies[letter] === undefined ? 0 : Frequencies[letter]/frequenciesDenom;
-					frequenciesProduct *= freq;
-				});
+				// word.split("").forEach(letter => {
+				// 	const freq = Frequencies[letter] === undefined ? 0 : Frequencies[letter]/frequenciesDenom;
+				// 	frequenciesProduct *= freq;
+				// });
 
 				// The higher the frequency, the lower the chance of rejecting and the higher the chance of accepting
-				if (Math.random() < frequenciesProduct*100) { // Accept
+				// if (Math.random() < frequenciesProduct*100) { // Accept
+				if (true){
 					// Check that the word works with the rest of the board
 	  				let fits = true;
 	  				for (let i = 0; i < word.length; i++) {

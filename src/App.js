@@ -27,11 +27,15 @@ class App extends Component {
 
     		worker: undefined,
 				inProgress: false,
-				generationTime: 0,
+				genTime: 0,
+				genTested: 0,
+				genInserted: 0,
 				
 				manyWorkers: [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
 				manyInProgress: 0,
-				manyTime: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+				manyTime: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				manyTested: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				manyInserted: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     	};
   	}
 
@@ -94,7 +98,9 @@ class App extends Component {
 					clues: e.data.clues,
 					inProgress: false,
 					worker: worker,
-					generationTime: totalTime,
+					genTime: totalTime,
+					genTested: e.data.tested,
+					genInserted: e.data.inserted
 				});
   		}
   	}
@@ -138,25 +144,45 @@ class App extends Component {
 					let tempTime = thisComponent.state.manyTime.slice(0);
 					const endTime = Math.trunc(performance.now());
 					tempTime[i] = (endTime-startTime)/1000;;
+
+					let tempInserted = thisComponent.state.manyInserted.slice(0);
+					tempInserted[i] = e.data.inserted;
+
+					let tempTested = thisComponent.state.manyTested.slice(0);
+					tempTested[i] = e.data.tested;
 					console.log(i);
 
 					thisComponent.setState((prevState) => ({
 						manyInProgress: prevState.manyInProgress - 1,
 						manyWorkers: tempWorkers,
 						manyTime: tempTime,
+						manyInserted: tempInserted,
+						manyTested: tempTested
 					}));
 				}
 			}
 			this.setState({ manyWorkers: newWorkers });
   	}
 
-		printManyTime = () => {
+		printMany = (data) => {
 			let outputStr = "["
 			for (let i = 0; i < 10; i++){
-				outputStr = outputStr + this.state.manyTime[i] + "s, ";
+				outputStr = outputStr + data[i] + ", ";
 			}
 			outputStr = outputStr.slice(0, outputStr.length - 2) + "]";
 			return outputStr;
+		}
+
+		avg = (data) => {
+			let val = 0;
+			let nVals =0;
+			for (let i = 0; i < 10; i++){
+				if (data[i] > 0){
+					val+=data[i];
+					nVals++;
+				}
+			}
+			return val/nVals;
 		}
 
   	render() {
@@ -194,12 +220,18 @@ class App extends Component {
 							/>
 							<div className={(this.state.manyProgress > 0)?"inactiveShadow":"buttonShadow"} />
 	          </div>
-						<p>
-							Time to generate 1: {this.state.generationTime} seconds
-						</p>
-						<p>
-							Time to generate 10: {this.printManyTime()}
-						</p>
+						<div className="statsContainer">
+							<p>Time to generate 1: {this.state.genTime} seconds</p>
+							<p>Words inserted for 1: {this.state.genInserted}</p>
+							<p>Words tested for 1: {this.state.genTested}</p>
+						</div>
+						<div className="statsContainer">
+							<p>Time to generate 10 (s): {this.printMany(this.state.manyTime)}</p>
+							{/* <p>Words inserted for 10: {this.printMany(this.state.manyInserted)}</p> */}
+							<p>Avg words inserted for 10: {this.avg(this.state.manyInserted)}</p>
+							{/* <p>Words tested for 10: {this.printMany(this.state.manyTested)}</p> */}
+							<p>Avg words tested for 10: {this.avg(this.state.manyTested)}</p>
+						</div>
 	        </div>
   			</div>
   		);

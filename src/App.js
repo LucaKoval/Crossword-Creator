@@ -194,7 +194,7 @@ class App extends Component {
 	}
 
   	render() {
-  		return(
+  		return (
   			<div className={styles.container}>
   				<div className={styles.contentContainer}>
 	  				<div className={styles.crosswordContainer}>

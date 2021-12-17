@@ -20,7 +20,7 @@ onmessage = function(e) {
 			if (rowOrCol % 2 === 0) { // Clear row
 				// get # rows to clear
 				const amountToClear = Math.floor(Math.random() * row) + 1;
-				// const amountToClear = 1;
+				// const amountToClear = 1; //used for testing without batch clears
 
 				let wordsErased = [];
 
@@ -46,8 +46,8 @@ onmessage = function(e) {
 				});
 			} else { // Clear col
 				// get # cols to clear
-				// const amountToClear = Math.floor(Math.random() * col) + 1;
-				const amountToClear = 1;
+				const amountToClear = Math.floor(Math.random() * col) + 1;
+				// const amountToClear = 1; //used for testing without batch clears
 
 				let wordsErased = [];
 
@@ -86,15 +86,15 @@ onmessage = function(e) {
 				wordsChecked++;
 				
 				// Go through probabilistic acceptance
-				// let frequenciesProduct = 1;
-				// word.split("").forEach(letter => {
-				// 	const freq = Frequencies[letter] === undefined ? 0 : Frequencies[letter]/frequenciesDenom;
-				// 	frequenciesProduct *= freq;
-				// });
+				let frequenciesProduct = 1;
+				word.split("").forEach(letter => {
+					const freq = Frequencies[letter] === undefined ? 0 : Frequencies[letter]/frequenciesDenom;
+					frequenciesProduct *= freq;
+				});
 
 				// The higher the frequency, the lower the chance of rejecting and the higher the chance of accepting
-				// if (Math.random() < frequenciesProduct*100) { // Accept
-				if (true){
+				if (Math.random() < frequenciesProduct*100) { // Accept
+				// if (true){ // used to test without the frequency check
 					// Check that the word works with the rest of the board
 	  				let fits = true;
 	  				for (let i = 0; i < word.length; i++) {

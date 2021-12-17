@@ -66,7 +66,6 @@ class App extends Component {
 			this.setState({ inProgress: true });
 	  		const clearBoard = this.generateClearBoard(this.state.size)
 
-
 	  		let oldWorker = this.state.worker;
 	  		if (oldWorker !== undefined) {
 		  		oldWorker.terminate();
@@ -115,10 +114,10 @@ class App extends Component {
   		}
   	}
 
-	generateManyData = () => {
+	generateManyBoards = () => {
 		const startTime = Math.trunc(performance.now());
 		this.setState({ manyProgress: 10 });
-		const clearBoard = this.generateClearBoard()
+		const clearBoard = this.generateClearBoard(this.state.size);
 		let newWorkers = [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined];
 
 		//reset all manyWorkers
@@ -131,7 +130,7 @@ class App extends Component {
 		}
 
 		
-		for  (let i = 0; i < 10; i++) {
+		for (let i = 0; i < 10; i++) {
 			let worker = new window.Worker("./generate.js");
 			newWorkers[i] = worker;
 			worker.postMessage({ 
@@ -160,7 +159,6 @@ class App extends Component {
 
 				let tempTested = thisComponent.state.manyTested.slice(0);
 				tempTested[i] = e.data.tested;
-				console.log(i);
 
 				thisComponent.setState((prevState) => ({
 					manyInProgress: prevState.manyInProgress - 1,
@@ -235,7 +233,7 @@ class App extends Component {
 							value={(this.state.manyProgress > 0)
 								? this.state.manyProgress + " in progress"
 								:"Generate new x10"}
-							onClick={this.generateManyData}
+							onClick={this.generateManyBoards}
 						/>
 						<div className={(this.state.manyProgress > 0)?"inactiveShadow":"buttonShadow"} />
 	          		</div>

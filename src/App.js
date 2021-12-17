@@ -60,7 +60,7 @@ class App extends Component {
   		return board;
   	}
 
-  	generateData = () => {
+  	generateBoard = () => {
   		if (!this.state.inProgress) {
 			const startTime = Math.trunc(performance.now());
 			this.setState({ inProgress: true });
@@ -224,7 +224,7 @@ class App extends Component {
 	              			type="Submit"
 	              			className={this.state.inProgress ? "inactiveButton" : "button"}
 	              			value={this.state.inProgress ? "In progress" : "Generate new"}
-	              			onClick={this.generateData}
+	              			onClick={this.generateBoard}
 	            		/>
 	            		<div className={this.state.inProgress ? "inactiveShadow" : "buttonShadow"} />
 	          		</div>

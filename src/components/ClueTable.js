@@ -26,14 +26,8 @@ class ClueTable extends Component {
 	  			}
 	  			for (let j = 0; j < 2; j++) {
 	  				row.push(
-	  					<div
-	  						className={styles.cellContainer}
-	  						key={"cell "+i+""+j}
-	  					>
-	  						{/* Conditional styling example from https://www.pluralsight.com/guides/applying-classes-conditionally-react */}
-	  						<div className={`styles.cell ${j === 0 ? styles.headerCell : styles.dataCell}`}>
-	  							{j === 0 ? clueNumber : data[i].slice(0, 30)}
-	  						</div>
+	  					<div className={`${styles.cell} ${j === 0 ? styles.headerCell : styles.dataCell}`}>
+	  						{j === 0 ? clueNumber : data[i].slice(0, 30)}
 	  					</div>
 	  				)
 	  			}

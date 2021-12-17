@@ -10,8 +10,6 @@ onmessage = function(e) {
   	let foundWord = false;
 	let wordsChecked = 0; //counts words of the right length considered for insertion, whether or not they fit
 	let wordsInserted = 0; //counts only words actually inserted
-  	// let counter = 0;
-  	// while (counter < 2000 && (row < size || col < size)) {
   	while (row < size || col < size) {
   		// Go back and replace the most-recently placed word
   		if (rowOrCol > 0) {
@@ -138,7 +136,6 @@ onmessage = function(e) {
 			wordCounter++;
 		}
 		wordCounter = 0;
-		// counter++;
 	}
 
 	// Get clues, aka definitions

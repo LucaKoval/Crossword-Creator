@@ -107,7 +107,7 @@ class App extends Component {
 
 		generateManyData = () => {
 			const startTime = Math.trunc(performance.now());
-			this.setState({ manyProgress: 10 });
+			this.setState({ manyInProgress: 10 });
 			const clearBoard = this.generateClearBoard()
 			let newWorkers = [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined];
 
@@ -212,13 +212,13 @@ class App extends Component {
 						<div className="buttonContainer">
 							<input
 								type="Submit"
-								className={(this.state.manyProgress > 0)?"inactiveButton":"button"}
-								value={(this.state.manyProgress > 0)
-									? this.state.manyProgress + " in progress"
+								className={(this.state.manyInProgress > 0)?"inactiveButton":"button"}
+								value={(this.state.manyInProgress > 0)
+									? this.state.manyInProgress + " in progress"
 									:"Generate new x10"}
 								onClick={this.generateManyData}
 							/>
-							<div className={(this.state.manyProgress > 0)?"inactiveShadow":"buttonShadow"} />
+							<div className={(this.state.manyInProgress > 0)?"inactiveShadow":"buttonShadow"} />
 	          </div>
 						<div className="statsContainer">
 							<p>Time to generate 1: {this.state.genTime} seconds</p>
@@ -228,9 +228,9 @@ class App extends Component {
 						<div className="statsContainer">
 							<p>Time to generate 10 (s): {this.printMany(this.state.manyTime)}</p>
 							{/* <p>Words inserted for 10: {this.printMany(this.state.manyInserted)}</p> */}
-							<p>Avg words inserted for 10: {this.avg(this.state.manyInserted)}</p>
+							<p>Avg words inserted for {10-this.state.manyInProgress}: {this.avg(this.state.manyInserted)}</p>
 							{/* <p>Words tested for 10: {this.printMany(this.state.manyTested)}</p> */}
-							<p>Avg words tested for 10: {this.avg(this.state.manyTested)}</p>
+							<p>Avg words tested for {10-this.state.manyInProgress}: {this.avg(this.state.manyTested)}</p>
 						</div>
 	        </div>
   			</div>

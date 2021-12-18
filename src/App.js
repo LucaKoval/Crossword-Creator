@@ -6,7 +6,6 @@ import ClueTable from './components/ClueTable';
 import Crossword from './components/Crossword';
 import SortedWords from './data/sortedWords';
 import TimesUsed from './data/timesUsed';
-// import Worker from "./workers/generate.js";
 
 // Dictionary is from https://github.com/matthewreagan/WebstersEnglishDictionary
 import Dictionary from './data/dictionary_compact';

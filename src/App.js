@@ -78,7 +78,7 @@ class App extends Component {
 				sortedWords: this.state.sortedWords,
 				board: clearBoard,
 				size: this.state.size,
-				TimesUsed: TimesUsed,
+				TimesUsed: TimesUsed, // Should be a copy, not the sole instance
 				Frequencies: Frequencies,
 				frequenciesDenom: this.state.frequenciesDenom,
 				Dictionary: Dictionary,
@@ -136,7 +136,7 @@ class App extends Component {
 				sortedWords: this.state.sortedWords,
 				board: clearBoard,
 				size: this.state.size,
-				TimesUsed: TimesUsed,
+				TimesUsed: TimesUsed, // Should be a copy, not the sole instance
 				Frequencies: Frequencies,
 				frequenciesDenom: this.state.frequenciesDenom,
 				Dictionary: Dictionary,

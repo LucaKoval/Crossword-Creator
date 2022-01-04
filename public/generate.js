@@ -18,7 +18,6 @@ onmessage = function(e) {
 			if (rowOrCol % 2 === 0) { // Clear row
 				// get # rows to clear
 				const amountToClear = Math.floor(Math.random() * row) + 1;
-				// const amountToClear = 1; //used for testing without batch clears
 
 				let wordsErased = [];
 
@@ -116,7 +115,7 @@ onmessage = function(e) {
 		  				}
 		  				foundWord = true;
 		  				TimesUsed[word]++;
-							wordsInserted++;
+						wordsInserted++;
 	  				}
 				}
 			}
